@@ -10,4 +10,4 @@ router
     .delete('/users/id/:id', UserController.deleteUserId)
     .put('/users/id/:id', UserController.editUser)
 
-module.exports = router;
+module.exports = router
