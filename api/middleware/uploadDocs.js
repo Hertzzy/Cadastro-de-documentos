@@ -19,6 +19,6 @@ module.exports = (multer({
             return cb(null, true)
         }
 
-        return cb(null. false)
+        return cb(null, false)
     }
 }))

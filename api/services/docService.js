@@ -13,7 +13,7 @@ class DocService {
             }
         });
 
-        if (doc){
+        if (doc) {
             throw new Error('Documentos já cadastrado')
         }
 
@@ -35,7 +35,7 @@ class DocService {
         }
     }
     // Search all docs
-    async SearchAllDocs(){
+    async searchAllDocs(){
         const docs = await db.docs.findAll()
 
         if(!docs) {
@@ -45,7 +45,7 @@ class DocService {
         return docs
     }
     // Search one docs ID
-    async SearchDocsId(id){
+    async searchDocsId(id){
         const doc = await db.docs.findOne({
             where: {
                 id: id
@@ -83,33 +83,33 @@ class DocService {
 
     }
     // Edit Doc
-    async editDoc(dto){
-        const doc = await db.docs.findOne({
-            where: {
-                id: dto.id
-            }
-        });
-
-        if (!doc){
-            throw new Error('Documento não cadatrado')
-        }
-
+    async editDoc(dto) {
         try {
-            doc.name = dto.name
-            doc.documentType = dto.documentType
-            doc.documentCode = dto.documentCode
-            doc.documentCpf = dto.documentCpf
-            doc.upload = dto.upload
-            
+            const doc = await db.docs.findOne({
+                where: {
+                    id: dto.id
+                }
+            });
+
+            if (!doc) {
+                throw new Error('Documento não cadastrado');
+            }
+
+            doc.name = dto.name; // Atualize com o valor correto
+            doc.documentType = dto.documentType;
+            doc.documentCode = dto.documentCode;
+            doc.documentCpf = dto.documentCpf;
+            doc.upload = dto.upload;
+
             await doc.save();
 
-            return await doc.reload()
+            console.log(doc);
 
+            return await doc.reload();
         } catch (error) {
-            throw new Error('Erro ao deletar documento', error)
+            throw new Error('Erro ao editar documento', error);
         }
     }
-
 }
 
 module.exports = DocService

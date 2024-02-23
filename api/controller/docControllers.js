@@ -1,8 +1,5 @@
 const DocService = require('../services/docService')
 const docService = new DocService;
-const {
-    v4: uuidv4
-} = require('uuid')
 
 class DocController {
     // Register Doc
@@ -12,7 +9,6 @@ class DocController {
             documentType,
             documentCode,
             documentCpf,
-            upload
         } = req.body;
 
         try {
@@ -35,16 +31,16 @@ class DocController {
         }
     }
     // Search all docs
-    static async SearchAllDocs(req, res) {
-        const docs = await docService.SearchAllDocs()
+    static async searchAllDocs(req, res) {
+        const docs = await docService.searchAllDocs()
 
         res.status(200).json(docs)
     }
 
-    static async SearchDocsId(req, res) {
+    static async searchDocsId(req, res) {
         try {
             const { id } = req.params;
-            const doc = await docService.SearchDocsId(id)
+            const doc = await docService.searchDocsId(id)
 
             res.status(200).json(doc)
         } catch (error) {
@@ -72,15 +68,16 @@ class DocController {
 
     static async editDoc(req, res) {
         const { id } = req.params;
-         const {
-             name,
-             documentType,
-             documentCode,
-             documentCpf,
-             upload
-         } = req.body;
 
-         try {
+        const {
+            name,
+            documentType,
+            documentCode,
+            documentCpf,
+            upload
+        } = req.body;
+
+        try {
             const doc = await docService.editDoc({
                 id,
                 name,
@@ -88,17 +85,16 @@ class DocController {
                 documentCode,
                 documentCpf,
                 upload
-            })
+            });
 
-            res.status(201).json({
-                message: 'Documento deletado com sucesso!'
-            }, doc)
-         } catch (error) {
+            res.status(201).json(doc);
+        } catch (error) {
             res.status(400).send({
                 message: error.message
-            })
-         }
+            });
+        }
     }
+
 }
 
 module.exports = DocController
