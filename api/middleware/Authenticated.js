@@ -1,11 +1,12 @@
 const {
     verify,
     decode
-} = require('jsonwebtoken')
+} = require('jsonwebtoken');
 const jsonSecret = require('../config/jsonSecret');
 
 module.exports = async (req, res, next) => {
     const token = req.headers.authorization
+        console.log(token)
 
     if (!token) {
         return res.status(401).send('Access token nao informado')
@@ -18,11 +19,11 @@ module.exports = async (req, res, next) => {
 
         const {
             id,
-            email
+            address
         } = await decode(accessToken)
 
-        req.usuarioId = id
-        req.usuarioEmail = email
+        req.userId = id
+        req.address = address
 
         return next()
     } catch (error) {
