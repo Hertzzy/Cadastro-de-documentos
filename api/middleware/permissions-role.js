@@ -9,7 +9,7 @@ const permissionsRoles = (permissionsList) => {
 
         const user = await db.users.findOne({
             include: [{
-                model: database.roles,
+                model: db.roles,
                 as: 'users_roles',
                 attributes: ['id', 'role_name']
             }],
@@ -24,8 +24,8 @@ const permissionsRoles = (permissionsList) => {
 
         let rolesListId = []
 
-        Object.values(user.user_roles).map((role) => {
-            listaRolesId.push(role.id)
+        Object.values(user.users_roles).map((role) => {
+            rolesListId.push(role.id)
         })
 
         if (rolesListId.length == 0) {
@@ -34,8 +34,8 @@ const permissionsRoles = (permissionsList) => {
 
         const roles = await db.roles.findAll({
             include: [{
-                model: db.permissoes,
-                as: 'roles_das_permissions',
+                model: db.permissions,
+                as: 'roles_das_permissoes',
                 attributes: ['id', 'permission_name']
             }],
             where: {
@@ -48,9 +48,9 @@ const permissionsRoles = (permissionsList) => {
         let hasPermissao = false;
 
         roles.map((role) => {
-            possuiPermissao = role.roles_das_permissions
-                .map((permissions) => permission.permission_name)
-                .some((permissions) => listaPermissoes.includes(permissions))
+            hasPermissao = role.roles_das_permissoes
+                .map((permission) => permission.permission_name)
+                .some((permission) => permissionsList.includes(permission))
         })
 
 
