@@ -39,7 +39,26 @@ class UserService {
     };
     // Search all Users
     async searchAllUsers(){
-        const users = await db.users.findAll()
+        const users = await db.users.findAll({
+            include: [
+                {
+                    model: db.roles,
+                    as: 'users_roles',
+                    attributes: ['id', 'role_name', 'description'],
+                        through: {
+                            attributes: [],
+                    }
+                },
+                {
+                    model: db.permissions,
+                    as: 'users_permissions',
+                    attributes: ['id', 'permission_name', 'description'],
+                    through: {
+                        attributes: [],
+                    }
+                }
+            ]
+        })
         
         return users;
     };

@@ -4,7 +4,6 @@ const Sequelize = require('sequelize');
 class SecurityService {
     // Registrar ACL
     async registerAcl(dto) {
-        
         // Verificar se dto.userId está definido
         if (typeof dto.userId === 'undefined') {
             throw new Error('ID do usuário não fornecido. Id do usuário: ' + dto.userId );
@@ -83,6 +82,50 @@ class SecurityService {
         });
 
         return newUser;
+    }
+
+    async registerPermissionsRoles(dto){
+        const role = await db.roles.findOne({
+            include:[
+                {
+                    model: db.permissions,
+                    as: 'roles_das_permissoes',
+                    attributes: ['id', 'permission_name', 'description']
+                }
+            ]
+        })
+
+        if(!role) {
+            throw new Error('Role não cadastrada')
+        }
+
+        const permissionsRegistered = await db.permissions.findAll({
+            where: {
+                id: {
+                    [Sequelize.Op.in]: dto.permissions
+                }
+            }
+        })
+
+        await role.removeRoles_das_permissoes(role.roles_das_permissoes)
+
+        await role.addRoles_das_permissoes(permissionsRegistered)
+
+        const newRole = await db.roles.findOne({
+            include: [
+                {
+                    model: db.permissions,
+                    as: 'roles_das_permissoes',
+                    attributes: ['id', 'permission_name', 'description']
+                }
+            ],
+            where: {
+                id: dto.roleId
+            }
+        })
+
+        return newRole
+
     }
 }
 

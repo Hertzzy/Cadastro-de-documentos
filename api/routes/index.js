@@ -9,11 +9,11 @@ const security = require('./securityRoute')
 module.exports = app => {
   app.use(
     bodyParser.json(),
+    auth,
     doc,
     user,
     role,
     permission,
-    auth,
     security
   )
 }

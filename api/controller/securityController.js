@@ -7,8 +7,6 @@ class SecurityController {
 
         const { userId } = req;
         
-        // console.log(userId);
-
         try {
             const acl = await securityService.registerAcl({
                 roles,
@@ -22,6 +20,19 @@ class SecurityController {
             res.status(400).send({
                 message: error.message
             });
+        }
+    }
+
+    static async registerPermissionsRoles(req, res) {
+
+        const { roleId, permissions } = req.body
+        
+        try {
+            const permissionsRoles = await securityService.registerPermissionsRoles({ roleId, permissions })
+
+            res.status(201).send(permissionsRoles)
+        } catch (error) {
+            res.status(400).send({message: error.message})
         }
     }
 }

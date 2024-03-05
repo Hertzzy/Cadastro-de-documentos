@@ -7,13 +7,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       roles.belongsToMany(models.users, {
         through: models.user_roles,
-        as: 'roles_of_user',
+        as: 'roles_do_usuario',
         foreignKey: 'role_id'
       })
 
       roles.belongsToMany(models.permissions, {
         through: models.roles_permissions,
-        as: 'roles_of_permission',
+        as: 'roles_das_permissoes',
         foreignKey: 'role_id'
       })
     }
